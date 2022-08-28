@@ -33,12 +33,12 @@ import { filterImageFromURL, deleteLocalFiles, validURL } from "./util/util";
       if (!image_url) {
         return res.status(400).send({ message: "Image url is required" });
       }
-         //if url is not valid
-         if (!validURL(image_url)) {
-          return res.status(400).send({ message: "Image url is not valid" });
-        }
+      //if url is not valid
+      if (!validURL(image_url)) {
+        return res.status(400).send({ message: "Image url is not valid" });
+      }
 
-      const filteredImagePath = await filterImageFromURL(image_url);
+      const filteredImagePath: string = await filterImageFromURL(image_url);
       res.status(200).sendFile(filteredImagePath);
 
       //delete file after response
