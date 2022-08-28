@@ -29,7 +29,7 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
   app.get("/filteredimage", async (req, res) => {
     try {
       const { image_url } = req.query;
-      console.log(image_url);
+
       if (!image_url) {
         return res.status(400).send({ message: "Image url is required" });
       }
@@ -38,9 +38,7 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
       res.status(200).sendFile(filteredImagePath);
 
       //delete file after response
-      res.on("finish", () => {
-        deleteLocalFiles([filteredImagePath]);
-      });
+      res.on("finish", () => deleteLocalFiles([filteredImagePath]));
     } catch (error) {
       res.status(500).send({ message: "Internal server error" });
     }
