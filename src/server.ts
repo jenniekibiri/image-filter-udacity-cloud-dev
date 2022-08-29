@@ -30,7 +30,7 @@ import { filterImageFromURL, deleteLocalFiles, validURL } from "./util/util";
     "/filteredimage",
     async (req: express.Request, res: express.Response) => {
       try {
-        const { image_url } = req.query;
+        const image_url: string = req.query.image_url;
 
         if (!image_url) {
           return res.status(400).send({ message: "Image url is required" });
@@ -57,7 +57,7 @@ import { filterImageFromURL, deleteLocalFiles, validURL } from "./util/util";
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get("/", async (req:express.Request, res:express.Response) => {
+  app.get("/", async (req: express.Request, res: express.Response) => {
     res.send("try GET /filteredimage?image_url={{}}");
   });
 
