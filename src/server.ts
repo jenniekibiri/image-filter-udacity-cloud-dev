@@ -26,27 +26,30 @@ import { filterImageFromURL, deleteLocalFiles, validURL } from "./util/util";
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
-  app.get("/filteredimage", async (req, res) => {
-    try {
-      const { image_url } = req.query;
+  app.get(
+    "/filteredimage",
+    async (req: express.Request, res: express.Response) => {
+      try {
+        const { image_url } = req.query;
 
-      if (!image_url) {
-        return res.status(400).send({ message: "Image url is required" });
+        if (!image_url) {
+          return res.status(400).send({ message: "Image url is required" });
+        }
+        //if url is not valid
+        if (!validURL(image_url)) {
+          return res.status(400).send({ message: "Image url is not valid" });
+        }
+
+        const filteredImagePath: string = await filterImageFromURL(image_url);
+        res.status(200).sendFile(filteredImagePath);
+
+        //delete file after response
+        res.on("finish", () => deleteLocalFiles([filteredImagePath]));
+      } catch (error) {
+        res.status(500).send({ message: "Internal server error" });
       }
-      //if url is not valid
-      if (!validURL(image_url)) {
-        return res.status(400).send({ message: "Image url is not valid" });
-      }
-
-      const filteredImagePath: string = await filterImageFromURL(image_url);
-      res.status(200).sendFile(filteredImagePath);
-
-      //delete file after response
-      res.on("finish", () => deleteLocalFiles([filteredImagePath]));
-    } catch (error) {
-      res.status(500).send({ message: "Internal server error" });
     }
-  });
+  );
 
   /**************************************************************************** */
 
